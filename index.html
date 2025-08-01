@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oreoluwa – Portfolio</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #0f0f0f;
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+    .hero {
+      height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+    }
+    .btn-primary {
+      background-color: #00c9a7;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #00a88f;
+    }
+    section {
+      padding: 80px 0;
+    }
+    .card {
+      background-color: #1c1c1c;
+      border: none;
+      transition: 0.3s;
+      color: #fff;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 255, 200, 0.15);
+    }
+    footer {
+      background: #111;
+      padding: 40px 0;
+      text-align: center;
+    }
+    .side-nav {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      z-index: 1000;
+      background: rgba(20, 20, 30, 0.85);
+      border-radius: 0 18px 18px 0;
+      padding: 18px 8px;
+      box-shadow: 2px 0 18px #0004;
+      gap: 18px;
+      height: auto;
+    }
+    .side-nav .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin: 0 0 8px 0;
+      border-radius: 50%;
+      background: none;
+      color: #00c9a7;
+      font-size: 1.6rem;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      box-shadow: 0 2px 8px #00c9a722;
+    }
+    .side-nav .nav-btn:hover,
+    .side-nav .nav-btn.active {
+      background: #00c9a7;
+      color: #fff;
+      box-shadow: 0 4px 16px #00c9a744;
+    }
+    .side-nav .nav-btn span {
+      pointer-events: none;
+    }
+    @media (max-width: 768px) {
+      .side-nav { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Modern Sleek Vertical Scroller Nav -->
+  <nav class="side-nav d-none d-md-flex flex-column align-items-center justify-content-center">
+    <a href="#home" class="nav-btn" title="Home"><span>🏠</span></a>
+    <a href="#about" class="nav-btn" title="About"><span>👤</span></a>
+    <a href="#skills" class="nav-btn" title="Skills"><span>🛠️</span></a>
+    <a href="#works" class="nav-btn" title="Works"><span>🎬</span></a>
+    <a href="#contact" class="nav-btn" title="Contact"><span>✉️</span></a>
+  </nav>
+
+  <header class="hero" id="home">
+    <div>
+      <h1 data-aos="fade-up">Hi, I’m <span class="text-info">Oreoluwa</span></h1>
+      <p class="lead" data-aos="fade-up" data-aos-delay="200">A Creative Developer, Designer & Video Editor</p>
+      <a href="#contact" class="btn btn-primary btn-lg mt-4" data-aos="fade-up" data-aos-delay="400">What Can I do?</a>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-right">About Me</h2>
+      <p class="text-center" data-aos="fade-up">I’m a multi-talented digital creator who designs, codes, edits videos, and brings modern ideas to life. I’m all about clean, beautiful results.</p>
+    </div>
+  </section>
+
+  <section id="skills" class="bg-dark text-white">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-left">What I Can Do</h2>
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="zoom-in">
+          <div class="card p-4">
+            <h4>Web Development</h4>
+            <p>I build stunning responsive websites with HTML, CSS, JS, Tailwind, Bootstrap & more.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+          <div class="card p-4">
+            <h4>UI/UX Design</h4>
+            <p>I design sleek user interfaces using Figma, Adobe XD, and apply real-world UX thinking.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+          <div class="card p-4">
+            <h4>Video Editing</h4>
+            <p>Professional edits for social media, YouTube, or reels using Premiere Pro & After Effects.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in">
+          <div class="card p-4">
+            <h4>Graphics Design</h4>
+            <p>Logos, banners, flyers, thumbnails – clean and catchy designs with Photoshop & Canva.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+          <div class="card p-4">
+            <h4>Game Dev (Unity)</h4>
+            <p>I use Unity, Invector, and C# to create immersive game mechanics & character controllers.</p>
+          </div>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+          <div class="card p-4">
+            <h4>Cybersecurity</h4>
+            <p>I understand ethical hacking tools and basic network security, from Evil Twin to Wireshark.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="works" class="bg-dark text-white">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">My Works</h2>
+      <p class="text-center mb-4" data-aos="fade-up" data-aos-delay="100">Check out some of my recent projects and edits.</p>
+      <div class="row justify-content-center g-4">
+        <div class="col-md-6" data-aos="zoom-in">
+          <div class="card p-3">
+            <div class="ratio ratio-16x9 mb-2">
+              <iframe src="https://www.youtube.com/embed/02sGxcr3DFA" title="YouTube video" allowfullscreen></iframe>
+            </div>
+            <h5 class="mt-2">Ferrari Animation | Made With Blender”</h5>
+          </div>
+        </div>
+        <div class="col-md-6" data-aos="zoom-in" data-aos-delay="100">
+          <div class="card p-3">
+            <div class="ratio ratio-16x9 mb-2">
+              <iframe src="https://www.youtube.com/embed/clzvd4fH7Io" title="YouTube video" allowfullscreen></iframe>
+            </div>
+            <h5 class="mt-2">My 2024 Showreel”</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <h2 class="text-center mb-4" data-aos="fade-up">Contact Me</h2>
+      <p class="text-center mb-4" data-aos="fade-up" data-aos-delay="100">Let’s work together. Hit me up anytime.</p>
+      <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+        <h4>Email me directly:</h4>
+        <a href="mailto:daragood67@gmail.com" class="text-info fs-5">daragood67@gmail.com</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Oreoluwa. Built with 💻 & ☕. Let’s make magic.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+
+    // Highlight active nav button on scroll
+    const navLinks = document.querySelectorAll('.side-nav .nav-btn');
+    const sections = ['home','about','skills','works','contact'].map(id => document.getElementById(id));
+    function updateNavHighlight() {
+      let idx = 0;
+      sections.forEach((sec, i) => {
+        if (sec && window.scrollY + 120 >= sec.offsetTop) idx = i;
+      });
+      navLinks.forEach((btn, i) => btn.classList.toggle('active', i === idx));
+    }
+    window.addEventListener('scroll', updateNavHighlight);
+    document.addEventListener('DOMContentLoaded', updateNavHighlight);
+  </script>
+</body>
+</html>
