@@ -15,16 +15,66 @@
       scroll-behavior: smooth;
     }
     .hero {
-      height: 100vh;
+      min-height: 100vh;
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
+      padding: 0 16px;
     }
     .hero h1 {
       font-size: 3.5rem;
       font-weight: 700;
+    }
+    @media (max-width: 992px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      section {
+        padding: 56px 0;
+      }
+    }
+    @media (max-width: 768px) {
+      .hero {
+        min-height: 70vh;
+        padding: 0 8px;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .lead {
+        font-size: 1.1rem;
+      }
+      section {
+        padding: 36px 0;
+      }
+      .card {
+        padding: 1.2rem !important;
+        font-size: 0.98rem;
+      }
+      .side-nav { display: none !important; }
+    }
+    @media (max-width: 576px) {
+      .hero {
+        min-height: 60vh;
+        padding: 0 4px;
+      }
+      .hero h1 {
+        font-size: 1.3rem;
+      }
+      .btn-lg {
+        font-size: 1rem;
+        padding: 0.7rem 1.2rem;
+      }
+      .card {
+        padding: 0.7rem !important;
+        font-size: 0.93rem;
+      }
+      .container {
+        padding-left: 6px;
+        padding-right: 6px;
+      }
     }
     .btn-primary {
       background-color: #00c9a7;
@@ -41,6 +91,8 @@
       border: none;
       transition: 0.3s;
       color: #fff;
+      min-width: 0;
+      word-break: break-word;
     }
     .card:hover {
       transform: translateY(-5px);
@@ -63,6 +115,7 @@
       box-shadow: 2px 0 18px #0004;
       gap: 18px;
       height: auto;
+      transition: left 0.4s cubic-bezier(.77,0,.18,1), top 0.4s cubic-bezier(.77,0,.18,1);
     }
     .side-nav .nav-btn {
       display: flex;
@@ -88,14 +141,70 @@
     .side-nav .nav-btn span {
       pointer-events: none;
     }
+    /* Mobile top nav styles */
     @media (max-width: 768px) {
-      .side-nav { display: none !important; }
+      .side-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        transform: none;
+        flex-direction: row !important;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0 0 18px 18px;
+        padding: 8px 0;
+        box-shadow: 0 2px 18px #0004;
+        gap: 0;
+        height: 0;
+        width: 100vw;
+        background: rgba(20, 20, 30, 0.97);
+        transition: max-height 0.4s cubic-bezier(.77,0,.18,1), opacity 0.4s cubic-bezier(.77,0,.18,1);
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+      }
+      .side-nav.show {
+        max-height: 80px;
+        opacity: 1;
+        height: auto;
+      }
+      .side-nav .nav-btn {
+        margin: 0 8px 0 0;
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+        border-radius: 50%;
+      }
+      .mobile-nav-toggle {
+        display: block;
+        position: fixed;
+        top: 12px;
+        left: 16px;
+        z-index: 2001;
+        background: #00c9a7;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        width: 44px;
+        height: 44px;
+        font-size: 2rem;
+        box-shadow: 0 2px 8px #00c9a744;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+    }
+    @media (min-width: 769px) {
+      .mobile-nav-toggle {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Modern Sleek Vertical Scroller Nav -->
-  <nav class="side-nav d-none d-md-flex flex-column align-items-center justify-content-center">
+  <!-- Modern Sleek Vertical/Top Nav -->
+  <button class="mobile-nav-toggle" aria-label="Toggle navigation" onclick="toggleMobileNav()">☰</button>
+  <nav class="side-nav flex-column align-items-center justify-content-center">
     <a href="#home" class="nav-btn" title="Home"><span>🏠</span></a>
     <a href="#about" class="nav-btn" title="About"><span>👤</span></a>
     <a href="#skills" class="nav-btn" title="Skills"><span>🛠️</span></a>
@@ -122,37 +231,37 @@
     <div class="container">
       <h2 class="text-center mb-5" data-aos="fade-left">What I Can Do</h2>
       <div class="row g-4">
-        <div class="col-md-4" data-aos="zoom-in">
+        <div class="col-md-4 col-sm-6 col-12" data-aos="zoom-in">
           <div class="card p-4">
             <h4>Web Development</h4>
             <p>I build stunning responsive websites with HTML, CSS, JS, Tailwind, Bootstrap & more.</p>
           </div>
         </div>
-        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+        <div class="col-md-4 col-sm-6 col-12" data-aos="zoom-in" data-aos-delay="100">
           <div class="card p-4">
             <h4>UI/UX Design</h4>
             <p>I design sleek user interfaces using Figma, Adobe XD, and apply real-world UX thinking.</p>
           </div>
         </div>
-        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+        <div class="col-md-4 col-sm-6 col-12" data-aos="zoom-in" data-aos-delay="200">
           <div class="card p-4">
             <h4>Video Editing</h4>
             <p>Professional edits for social media, YouTube, or reels using Premiere Pro & After Effects.</p>
           </div>
         </div>
-        <div class="col-md-4" data-aos="zoom-in">
+        <div class="col-md-4 col-sm-6 col-12" data-aos="zoom-in">
           <div class="card p-4">
             <h4>Graphics Design</h4>
             <p>Logos, banners, flyers, thumbnails – clean and catchy designs with Photoshop & Canva.</p>
           </div>
         </div>
-        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+        <div class="col-md-4 col-sm-6 col-12" data-aos="zoom-in" data-aos-delay="100">
           <div class="card p-4">
             <h4>Game Dev (Unity)</h4>
             <p>I use Unity, Invector, and C# to create immersive game mechanics & character controllers.</p>
           </div>
         </div>
-        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+        <div class="col-md-4 col-sm-6 col-12" data-aos="zoom-in" data-aos-delay="200">
           <div class="card p-4">
             <h4>Cybersecurity</h4>
             <p>I understand ethical hacking tools and basic network security, from Evil Twin to Wireshark.</p>
@@ -167,7 +276,7 @@
       <h2 class="text-center mb-5" data-aos="fade-up">My Works</h2>
       <p class="text-center mb-4" data-aos="fade-up" data-aos-delay="100">Check out some of my recent projects and edits.</p>
       <div class="row justify-content-center g-4">
-        <div class="col-md-6" data-aos="zoom-in">
+        <div class="col-md-6 col-12" data-aos="zoom-in">
           <div class="card p-3">
             <div class="ratio ratio-16x9 mb-2">
               <iframe src="https://www.youtube.com/embed/02sGxcr3DFA" title="YouTube video" allowfullscreen></iframe>
@@ -175,7 +284,7 @@
             <h5 class="mt-2">Ferrari Animation | Made With Blender”</h5>
           </div>
         </div>
-        <div class="col-md-6" data-aos="zoom-in" data-aos-delay="100">
+        <div class="col-md-6 col-12" data-aos="zoom-in" data-aos-delay="100">
           <div class="card p-3">
             <div class="ratio ratio-16x9 mb-2">
               <iframe src="https://www.youtube.com/embed/clzvd4fH7Io" title="YouTube video" allowfullscreen></iframe>
@@ -222,6 +331,21 @@
     }
     window.addEventListener('scroll', updateNavHighlight);
     document.addEventListener('DOMContentLoaded', updateNavHighlight);
+
+    // Mobile nav toggle
+    function toggleMobileNav() {
+      const nav = document.querySelector('.side-nav');
+      nav.classList.toggle('show');
+    }
+
+    // Hide mobile nav on link click
+    document.querySelectorAll('.side-nav .nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+          document.querySelector('.side-nav').classList.remove('show');
+        }
+      });
+    });
   </script>
 </body>
 </html>
