@@ -8,209 +8,272 @@
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    .tiktok-card.tiktok-loaded {
+      pointer-events: auto;
+    }
+    .tiktok-card.tiktok-loaded:hover {
+      transform: none !important;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+      border: none !important;
+      cursor: default;
+    }
+    .tiktok-cover {
+      position: absolute;
+      left: 0; top: 0; width: 100%; height: 100%;
+      background: linear-gradient(120deg, #101924 60%, #233447 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: background 0.2s;
+    }
+    .tiktok-cover:hover {
+      background: linear-gradient(120deg, #101924 40%, #00bcd4 100%);
+    }
+    .tiktok-play-btn {
+      font-size: 3.5rem;
+      color: #00bcd4;
+      background: rgba(16,25,36,0.7);
+      border-radius: 50%;
+      padding: 18px 28px 18px 32px;
+      box-shadow: 0 2px 16px #00bcd4aa;
+      transition: background 0.2s, color 0.2s;
+      border: 2px solid #00bcd4;
+    }
+    .tiktok-cover:hover .tiktok-play-btn {
+      color: #fff;
+      background: #00bcd4;
+      border-color: #fff;
+    }
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #0f0f0f;
-      color: #fff;
+      background: #101924;
+      background-image: linear-gradient(120deg, #101924 0%, #233447 100%);
+      color: #eaf6fb;
       scroll-behavior: smooth;
+      position: relative;
+      overflow-x: hidden;
+      cursor: url('https://cdn.jsdelivr.net/gh/ionic-team/ionicons@5.5.2/src/svg/planet-outline.svg'), auto;
+    }
+    .hero h1 {
+      position: relative;
+      z-index: 2;
+    }
+    .hero h1::after {
+      content: attr(data-outline);
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      z-index: 3;
+      pointer-events: none;
+      -webkit-text-stroke: 2.5px transparent;
+      background: linear-gradient(270deg, #fff 0%, #eaf6fb 40%, #00bcd4 60%, #fff 100%);
+      background-size: 200% 200%;  
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      -webkit-mask-image: linear-gradient(270deg, #fff 0%, #eaf6fb 40%, #00bcd4 60%, #fff 100%);
+      mask-image: linear-gradient(270deg, #fff 0%, #eaf6fb 40%, #00bcd4 60%, #fff 100%);
+      -webkit-mask-size: 200% 200%;
+      mask-size: 200% 200%;
+      -webkit-mask-clip: text;
+      mask-clip: text;
+      animation: outlineAnim 3.5s linear infinite;
+      filter: drop-shadow(0 0 8px #fff8);
+      opacity: 0.95;
+      font-size: inherit;
+      font-family: inherit;
+      font-weight: inherit;
+      text-align: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @keyframes outlineAnim {
+      0% { background-position: 0% 50%; -webkit-mask-position: 0% 50%; }
+      100% { background-position: 100% 50%; -webkit-mask-position: 100% 50%; }
+    }
+    /* Custom cursor fallback */
+    .custom-cursor {
+      position: fixed;
+      left: 0; top: 0;
+      width: 32px; height: 32px;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 50%;
+      border: 2px solid #00bcd4;
+      background: rgba(0,188,212,0.08);
+      transition: transform 0.15s, border 0.2s;
+      transform: translate(-50%, -50%) scale(1);
+      mix-blend-mode: lighten;
+      
+    }
+    /* Floating 3D shapes (subtle, blue/teal) */
+    .floating-shape {
+      position: fixed;
+      z-index: 0;
+      pointer-events: none;
+      filter: blur(0.5px) brightness(1.1) drop-shadow(0 2px 16px #00bcd4cc);
+      opacity: 0.5;
+      animation: floatShape 12s ease-in-out infinite alternate;
+      transition: opacity 0.5s;
+    }
+    .floating-shape.shape1 {
+      top: 8%; left: 4%; width: 80px; height: 80px;
+      background: radial-gradient(circle at 30% 30%, #00bcd4 0%, #233447 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 60px #00bcd4aa;
+      animation-delay: 0s;
+    }
+    .floating-shape.shape2 {
+      bottom: 10%; right: 7%; width: 100px; height: 100px;
+      background: linear-gradient(135deg, #233447 0%, #00bcd4 100%);
+      border-radius: 30% 70% 60% 40%/60% 30% 70% 40%;
+      box-shadow: 0 0 80px #00bcd488;
+      animation-delay: 2s;
+    }
+    .floating-shape.shape3 {
+      top: 60%; left: 2%; width: 50px; height: 50px;
+      background: linear-gradient(120deg, #00bcd4 0%, #233447 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 40px #00bcd488;
+      animation-delay: 4s;
+    }
+    @media (max-width: 600px) {
+      .floating-shape.shape2, .floating-shape.shape3 { display: none !important; }
+      .floating-shape.shape1 { width: 40px; height: 40px; opacity: 0.3; }
+    }
+    @keyframes floatShape {
+      0% { transform: translateY(0) scale(1) rotate(0deg); }
+      100% { transform: translateY(-40px) scale(1.08) rotate(20deg); }
+    }
+    /* Parallax particles (blue/teal, more visible) */
+    .particles {
+      position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
+      z-index: 1; pointer-events: none; transition: opacity 0.5s;
+    }
+    @media (max-width: 600px) {
+      .particles { opacity: 0.5; }
     }
     .hero {
       min-height: 100vh;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background: rgba(16,25,36,0.82);
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       padding: 0 16px;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 8px 40px #00bcd41a;
+      border-radius: 0 0 40px 40px;
+      overflow: hidden;
     }
     .hero h1 {
       font-size: 3.5rem;
       font-weight: 700;
+      background: linear-gradient(90deg, #00bcd4 0%, #233447 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 16px #00bcd4cc);
+      animation: heroGlow 2.5s ease-in-out infinite alternate;
     }
-    @media (max-width: 992px) {
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-      section {
-        padding: 56px 0;
-      }
+    @keyframes heroGlow {
+      0% { filter: drop-shadow(0 2px 16px #00bcd4cc); }
+      100% { filter: drop-shadow(0 4px 32px #233447cc); }
     }
-    @media (max-width: 768px) {
-      .hero {
-        min-height: 70vh;
-        padding: 0 8px;
-      }
-      .hero h1 {
-        font-size: 2rem;
-      }
-      .lead {
-        font-size: 1.1rem;
-      }
-      section {
-        padding: 36px 0;
-      }
-      .card {
-        padding: 1.2rem !important;
-        font-size: 0.98rem;
-      }
-      .side-nav { display: none !important; }
+    .hero .lead {
+      font-size: 1.3rem;
+      background: linear-gradient(90deg, #00bcd4 0%, #233447 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      animation: heroLeadFade 2.5s ease-in-out infinite alternate;
     }
-    @media (max-width: 576px) {
-      .hero {
-        min-height: 60vh;
-        padding: 0 4px;
-      }
-      .hero h1 {
-        font-size: 1.3rem;
-      }
-      .btn-lg {
-        font-size: 1rem;
-        padding: 0.7rem 1.2rem;
-      }
-      .card {
-        padding: 0.7rem !important;
-        font-size: 0.93rem;
-      }
-      .container {
-        padding-left: 6px;
-        padding-right: 6px;
-      }
-    }
-    .btn-primary {
-      background-color: #00c9a7;
-      border: none;
-    }
-    .btn-primary:hover {
-      background-color: #00a88f;
-    }
-    section {
-      padding: 80px 0;
+    @keyframes heroLeadFade {
+      0% { opacity: 0.8; }
+      100% { opacity: 1; }
     }
     .card {
-      background-color: #1c1c1c;
+      background: rgba(28,32,38,0.97);
       border: none;
-      transition: 0.3s;
-      color: #fff;
+      transition: 0.3s, box-shadow 0.5s cubic-bezier(.77,0,.18,1), transform 0.5s cubic-bezier(.77,0,.18,1);
+      color: #eaf6fb;
       min-width: 0;
       word-break: break-word;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px #00bcd433, 0 1.5px 8px #23344733;
+      backdrop-filter: blur(8px) saturate(120%);
+      will-change: transform, box-shadow;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      perspective: 900px;
     }
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0, 255, 200, 0.15);
+    /* Prevent hover effect on loaded TikTok cards */
+    .card:hover:not(.tiktok-loaded) {
+      transform: translateY(-8px) scale(1.03) rotateY(6deg) skewY(1deg);
+      box-shadow: 0 16px 48px #00bcd499, 0 4px 24px #23344799;
+      border: 1.5px solid #00bcd4;
     }
-    footer {
-      background: #111;
-      padding: 40px 0;
-      text-align: center;
+    .tiktok-card.tiktok-loaded:hover {
+      transform: none !important;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+      border: none !important;
+      cursor: default;
     }
-    .side-nav {
-      position: fixed;
-      top: 50%;
-      left: 0;
-      transform: translateY(-50%);
-      z-index: 1000;
-      background: rgba(20, 20, 30, 0.85);
-      border-radius: 0 18px 18px 0;
-      padding: 18px 8px;
-      box-shadow: 2px 0 18px #0004;
-      gap: 18px;
-      height: auto;
-      transition: left 0.4s cubic-bezier(.77,0,.18,1), top 0.4s cubic-bezier(.77,0,.18,1);
     }
-    .side-nav .nav-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      margin: 0 0 8px 0;
-      border-radius: 50%;
-      background: none;
-      color: #00c9a7;
-      font-size: 1.6rem;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      text-decoration: none;
-      box-shadow: 0 2px 8px #00c9a722;
-    }
-    .side-nav .nav-btn:hover,
-    .side-nav .nav-btn.active {
-      background: #00c9a7;
-      color: #fff;
-      box-shadow: 0 4px 16px #00c9a744;
-    }
-    .side-nav .nav-btn span {
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -40px; left: -40px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, #00bcd4 0%, #233447 80%, transparent 100%);
+      opacity: 0.13;
+      z-index: 0;
+      filter: blur(12px);
       pointer-events: none;
     }
-    /* Mobile top nav styles */
-    @media (max-width: 768px) {
-      .side-nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        transform: none;
-        flex-direction: row !important;
-        justify-content: center;
-        align-items: center;
-        border-radius: 0 0 18px 18px;
-        padding: 8px 0;
-        box-shadow: 0 2px 18px #0004;
-        gap: 0;
-        height: 0;
-        width: 100vw;
-        background: rgba(20, 20, 30, 0.97);
-        transition: max-height 0.4s cubic-bezier(.77,0,.18,1), opacity 0.4s cubic-bezier(.77,0,.18,1);
-        max-height: 0;
-        opacity: 0;
-        overflow: hidden;
-      }
-      .side-nav.show {
-        max-height: 80px;
-        opacity: 1;
-        height: auto;
-      }
-      .side-nav .nav-btn {
-        margin: 0 8px 0 0;
-        width: 40px;
-        height: 40px;
-        font-size: 1.3rem;
-        border-radius: 50%;
-      }
-      .mobile-nav-toggle {
-        display: block;
-        position: fixed;
-        top: 12px;
-        left: 16px;
-        z-index: 2001;
-        background: #00c9a7;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        width: 44px;
-        height: 44px;
-        font-size: 2rem;
-        box-shadow: 0 2px 8px #00c9a744;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
+    .btn-primary {
+      background: linear-gradient(90deg, #00bcd4 0%, #233447 100%);
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 2px 8px #00bcd444;
+      border-radius: 8px;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.18s cubic-bezier(.77,0,.18,1);
     }
-    @media (min-width: 769px) {
-      .mobile-nav-toggle {
-        display: none;
-      }
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #233447 0%, #00bcd4 100%);
+      box-shadow: 0 4px 16px #00bcd444;
+      color: #fff;
+      transform: scale(1.07);
+    }
+    footer {
+      background: linear-gradient(90deg, #233447 0%, #00bcd4 100%);
+      padding: 40px 0;
+      text-align: center;
+      color: #eaf6fb;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 -2px 24px #00bcd444;
     }
   </style>
+  <!-- Floating 3D shapes removed -->
+  <canvas class="particles" id="particlesCanvas"></canvas>
+  <!-- Three.js 3D background -->
+  <div id="three-bg" style="position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></div>
 </head>
 <body>
-  <!-- Modern Sleek Vertical/Top Nav -->
-  <button class="mobile-nav-toggle" aria-label="Toggle navigation" onclick="toggleMobileNav()">☰</button>
-  <nav class="side-nav flex-column align-items-center justify-content-center">
-    <a href="#home" class="nav-btn" title="Home"><span>🏠</span></a>
-    <a href="#about" class="nav-btn" title="About"><span>👤</span></a>
-    <a href="#skills" class="nav-btn" title="Skills"><span>🛠️</span></a>
-    <a href="#works" class="nav-btn" title="Works"><span>🎬</span></a>
-    <a href="#contact" class="nav-btn" title="Contact"><span>✉️</span></a>
-  </nav>
+
 
   <header class="hero" id="home">
     <div>
@@ -296,6 +359,720 @@
     </div>
   </section>
 
+  <!-- Gallery Section for Recent Works (TikTok Carousel) -->
+  <section id="gallery" class="bg-dark text-white py-5">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">Gallery</h2>
+      <div class="carousel-container">
+        <button class="nav-arrow left">‹</button>
+        <div class="carousel-track">
+          <div class="card tiktok-card" data-index="0">
+            <div class="tiktok-cover">
+              <span class="tiktok-play-btn">▶</span>
+            </div>
+            <div class="tiktok-loading-bar"><div class="tiktok-loading-inner"></div></div>
+          </div>
+          <div class="card tiktok-card" data-index="1">
+            <div class="tiktok-cover">
+              <span class="tiktok-play-btn">▶</span>
+            </div>
+            <div class="tiktok-loading-bar"><div class="tiktok-loading-inner"></div></div>
+          </div>
+          <div class="card tiktok-card" data-index="2">
+            <div class="tiktok-cover">
+              <span class="tiktok-play-btn">▶</span>
+            </div>
+            <div class="tiktok-loading-bar"><div class="tiktok-loading-inner"></div></div>
+          </div>
+          <div class="card tiktok-card" data-index="3">
+            <div class="tiktok-cover">
+              <span class="tiktok-play-btn">▶</span>
+            </div>
+            <div class="tiktok-loading-bar"><div class="tiktok-loading-inner"></div></div>
+          </div>
+          <div class="card tiktok-card" data-index="4">
+            <div class="tiktok-cover">
+              <span class="tiktok-play-btn">▶</span>
+            </div>
+            <div class="tiktok-loading-bar"><div class="tiktok-loading-inner"></div></div>
+          </div>
+          <div class="card tiktok-card" data-index="5">
+            <div class="tiktok-cover">
+              <span class="tiktok-play-btn">▶</span>
+            </div>
+            <div class="tiktok-loading-bar"><div class="tiktok-loading-inner"></div></div>
+          </div>
+
+        </div>
+        <button class="nav-arrow right">›</button>
+      </div>
+      <div class="member-info mt-4">
+        <h2 class="member-name">TikTok 1</h2>
+        <p class="member-role">Recent Work</p>
+      </div>
+      <div class="dots">
+        <div class="dot active" data-index="0"></div>
+        <div class="dot" data-index="1"></div>
+        <div class="dot" data-index="2"></div>
+        <div class="dot" data-index="3"></div>
+        <div class="dot" data-index="4"></div>
+        <div class="dot" data-index="5"></div>
+      </div>
+    </div>
+  </section>
+  <!-- Site Loading Overlay -->
+  <div id="siteLoadingOverlay">
+    <div class="site-loading-bar"><div class="site-loading-inner"></div></div>
+    <span class="site-loading-text">Loading portfolio...</span>
+  </div> 
+
+  <style>
+    /* Site Loading Overlay */
+    #siteLoadingOverlay {
+      position: fixed;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(120deg, #101924 0%, #233447 100%);
+      z-index: 20000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s cubic-bezier(.77,0,.18,1);
+      opacity: 1;
+    }
+    .site-loading-bar {
+      width: 320px;
+      height: 10px;
+      background: #233447;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 16px #00bcd4aa;
+    }
+    .site-loading-inner {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00bcd4 0%, #eaf6fb 100%);
+      border-radius: 8px;
+      transition: width 0.5s cubic-bezier(.77,0,.18,1);
+    }
+    .site-loading-text {
+      color: #eaf6fb;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 8px #00bcd4cc;
+    }
+    /* TikTok Card Carousel */
+    .carousel-container {
+      width: 100%;
+      max-width: 1200px;
+      height: 450px;
+      position: relative;
+      perspective: 1000px;
+      margin-top: 40px;
+    }
+    .carousel-track {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .tiktok-card {
+      position: absolute;
+      width: 280px;
+      height: 380px;
+      background: #181e29;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .tiktok-card iframe {
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      background: #101924;
+      min-height: 380px;
+    }
+    .tiktok-loading-bar {
+      width: 80%;
+      height: 6px;
+      background: #233447;
+      border-radius: 6px;
+      margin: 18px auto 8px auto;
+      overflow: hidden;
+      box-shadow: 0 2px 8px #00bcd4aa;
+      position: absolute;
+      left: 10%;
+      top: 16px;
+      z-index: 2;
+      display: block;
+    }
+    .tiktok-loading-inner {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #00bcd4 0%, #eaf6fb 100%);
+      border-radius: 6px;
+      transition: width 0.5s cubic-bezier(.77,0,.18,1);
+    }
+    /* Carousel nav and dots */
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,188,212,0.6);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 20;
+      transition: all 0.3s ease;
+      font-size: 1.5rem;
+      border: none;
+      outline: none;
+      padding-bottom: 4px;
+    }
+    .nav-arrow:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .nav-arrow.left { left: 20px; padding-right: 3px; }
+    .nav-arrow.right { right: 20px; padding-left: 3px; }
+    .dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(0,188,212,0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .dot.active {
+      background: #00bcd4;
+      transform: scale(1.2);
+    }
+    .member-info {
+      text-align: center;
+      margin-top: 20px;
+      transition: all 0.5s ease-out;
+    }
+    .member-name {
+      color: #00bcd4;
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      position: relative;
+      display: inline-block;
+    }
+    .member-role {
+      color: #848696;
+      font-size: 1.1rem;
+      font-weight: 500;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 10px 0;
+      margin-top: -15px;
+      position: relative;
+    }
+    .member-name::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #00bcd4 0%, #233447 100%);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+  </style>
+
+  <script>
+    // Site loading overlay logic
+    document.body.style.overflow = 'hidden';
+    const siteOverlay = document.getElementById('siteLoadingOverlay');
+    const siteBar = siteOverlay.querySelector('.site-loading-inner');
+    let siteProgress = 0;
+    function incSiteBar(val) {
+      siteProgress = Math.min(100, siteProgress + val);
+      siteBar.style.width = siteProgress + '%';
+    }
+    // Simulate loading progress
+    let fakeLoad = setInterval(() => {
+      incSiteBar(Math.random() * 18 + 7);
+      if (siteProgress >= 100) {
+        clearInterval(fakeLoad);
+        setTimeout(() => {
+          siteOverlay.style.opacity = '0';
+          document.body.style.overflow = '';
+          setTimeout(() => siteOverlay.style.display = 'none', 500);
+        }, 350);
+      }
+    }, 220);
+
+    // TikTok Carousel logic
+    const tiktokTitles = [
+      'TikTok 1', 'TikTok 2', 'TikTok 3', 'TikTok 4', 'TikTok 5', 'TikTok 6'
+    ];
+    const tiktokRoles = [
+      'Recent Work', 'Recent Work', 'Recent Work', 'Recent Work', 'Recent Work', 'Recent Work'
+    ];
+    const cards = document.querySelectorAll('.tiktok-card');
+    const dots = document.querySelectorAll('.dot');
+    const memberName = document.querySelector('.member-name');
+    const memberRole = document.querySelector('.member-role');
+    const leftArrow = document.querySelector('.nav-arrow.left');
+    const rightArrow = document.querySelector('.nav-arrow.right');
+    let currentIndex = 0;
+    let isAnimating = false;
+
+    function updateCarousel(newIndex) {
+      if (isAnimating) return;
+      isAnimating = true;
+      currentIndex = (newIndex + cards.length) % cards.length;
+      cards.forEach((card, i) => {
+        const offset = (i - currentIndex + cards.length) % cards.length;
+        card.classList.remove('center','left-1','left-2','right-1','right-2','hidden');
+        if (offset === 0) card.classList.add('center');
+        else if (offset === 1) card.classList.add('right-1');
+        else if (offset === 2) card.classList.add('right-2');
+        else if (offset === cards.length - 1) card.classList.add('left-1');
+        else if (offset === cards.length - 2) card.classList.add('left-2');
+        else card.classList.add('hidden');
+      }, 300);
+      setTimeout(() => { isAnimating = false; }, 800);
+    }
+    leftArrow.addEventListener('click', () => updateCarousel(currentIndex - 1));
+    rightArrow.addEventListener('click', () => updateCarousel(currentIndex + 1));
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => updateCarousel(i));
+    });
+    cards.forEach((card, i) => {
+      card.addEventListener('click', (e) => {
+        // Prevent carousel navigation if TikTok is loaded in this card
+        if (card.querySelector('iframe')) {
+          e.stopPropagation();
+          return;
+        }
+        updateCarousel(i);
+      });
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') updateCarousel(currentIndex - 1);
+      else if (e.key === 'ArrowRight') updateCarousel(currentIndex + 1);
+    });
+    let touchStartX = 0, touchEndX = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) updateCarousel(currentIndex + 1);
+        else updateCarousel(currentIndex - 1);
+      }
+    }
+    updateCarousel(0);
+
+    // TikTok click-to-load logic
+    const tiktokSrcs = [
+      'https://www.tiktok.com/embed/v2/7535100640792546581',
+      'https://www.tiktok.com/embed/v2/7534467319272066311',
+      'https://www.tiktok.com/embed/v2/7534339522683882773',
+      'https://www.tiktok.com/embed/v2/7534188783508507912',
+      'https://www.tiktok.com/embed/v2/7533969397963623687',
+      'https://www.tiktok.com/embed/v2/7533931426270416129'
+    ];
+    document.querySelectorAll('.tiktok-card').forEach((card, idx) => {
+      const cover = card.querySelector('.tiktok-cover');
+      const bar = card.querySelector('.tiktok-loading-inner');
+      let iframe = null;
+      let loaded = false;
+      function setTiltEnabled(enabled) {
+        if (enabled) {
+          card.classList.remove('tiktok-loaded');
+        } else {
+          card.classList.add('tiktok-loaded');
+        }
+      }
+      function unloadTikTok() {
+        if (iframe) {
+          iframe.remove();
+          iframe = null;
+          loaded = false;
+          bar.style.width = '0%';
+          bar.parentElement.style.display = 'block';
+          cover.style.display = 'flex';
+          setTiltEnabled(true);
+        }
+      }
+      function loadTikTok() {
+        if (iframe) return;
+        iframe = document.createElement('iframe');
+        iframe.src = tiktokSrcs[idx];
+        iframe.allow = 'autoplay; encrypted-media';
+        iframe.allowFullscreen = true;
+        iframe.style.border = 'none';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.minHeight = '380px';
+        iframe.style.borderRadius = '20px';
+        iframe.style.background = '#101924';
+        card.appendChild(iframe);
+        bar.parentElement.style.display = 'block';
+        bar.style.width = '0%';
+        cover.style.display = 'none';
+        setTiltEnabled(false);
+        let w = 0;
+        let interval = setInterval(() => {
+          if (loaded) { clearInterval(interval); return; }
+          w = Math.min(100, w + Math.random()*30+10);
+          bar.style.width = w + '%';
+          if (w >= 100) clearInterval(interval);
+        }, 180);
+        iframe.addEventListener('load', () => {
+          if (!loaded) {
+            bar.style.width = '100%';
+            setTimeout(() => {
+              bar.parentElement.style.display = 'none';
+            }, 400);
+            loaded = true;
+          }
+        });
+      }
+      cover.addEventListener('click', loadTikTok);
+      // Unload on click outside
+      document.addEventListener('mousedown', function(e) {
+        if (iframe && !card.contains(e.target)) {
+          unloadTikTok();
+        }
+      });
+    });
+  </script>
+
+  <!-- Pie Menu Navigation (Desktop) & Side Nav (Mobile) -->
+  <nav id="pieMenu" class="pie-menu-nav">
+    <div class="pie-menu-circle">
+      <button data-target="#home" title="Home">🏠</button>
+      <button data-target="#about" title="About">👤</button>
+      <button data-target="#skills" title="Skills">🛠️</button>
+      <button data-target="#works" title="Works">🎬</button>
+      <button data-target="#gallery" title="Gallery">🖼️</button>
+      <button data-target="#contact" title="Contact">✉️</button>
+    </div>
+  </nav>
+  <!-- Notification Alert -->
+  <div id="notifyAlert" class="notify-alert-glass" style="display:none;">
+    <span class="notify-icon">🖱️</span>
+    <span class="notify-text">Tip: <b>Right-click</b> anywhere to open the navigation menu!</span>
+    <button class="notify-close" aria-label="Close">&times;</button>
+  </div>
+  <nav id="sideNav" class="side-nav-mobile">
+    <a href="#home">🏠</a>
+    <a href="#about">👤</a>
+    <a href="#skills">🛠️</a>
+    <a href="#works">🎬</a>
+    <a href="#gallery">🖼️</a>
+    <a href="#contact">✉️</a>
+  </nav>
+  <style>
+    .notify-alert-glass {
+      position: fixed;
+      top: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10000;
+      background: rgba(30,40,60,0.82);
+      border-radius: 18px;
+      box-shadow: 0 4px 32px #00bcd4aa, 0 1.5px 8px #23344733;
+      border: 1.5px solid #00bcd4;
+      padding: 16px 32px 16px 20px;
+      color: #eaf6fb;
+      font-size: 1.1rem;
+      font-family: 'Poppins',sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      animation: notifyFadeIn 0.7s cubic-bezier(.77,0,.18,1);
+      backdrop-filter: blur(8px) saturate(120%);
+    }
+    .notify-alert-glass .notify-icon {
+      font-size: 1.6rem;
+      filter: drop-shadow(0 2px 8px #00bcd4cc);
+    }
+    .notify-alert-glass .notify-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      margin-left: 12px;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .notify-alert-glass .notify-close:hover {
+      background: #00bcd4cc;
+      color: #233447;
+    }
+    @keyframes notifyFadeIn {
+      0% { opacity: 0; transform: translateX(-50%) translateY(-30px) scale(0.95); }
+      100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    }
+    /* Gallery Section */
+    #gallery .card {
+      background: rgba(28,32,38,0.97);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px #00bcd422;
+      border: none;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    #gallery .card:hover {
+      box-shadow: 0 8px 32px #00bcd488;
+      transform: scale(1.03);
+    }
+    /* Pie Menu Nav (Desktop) */
+    .pie-menu-nav {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.28s cubic-bezier(.77,0,.18,1), visibility 0.28s;
+      position: fixed;
+      left: 0; top: 0;
+      width: 0; height: 0;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .pie-menu-nav.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity 0.28s cubic-bezier(.77,0,.18,1), visibility 0s;
+    }
+    .pie-menu-nav.fading {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(.77,0,.18,1), visibility 0.28s;
+    }
+    .pie-menu-circle {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(16,25,36,0.98);
+      box-shadow: 0 4px 32px #00bcd4aa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      transition: opacity 0.2s;
+      pointer-events: auto;
+    }
+    .pie-menu-circle button {
+      position: absolute;
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(120deg, #00bcd4 0%, #233447 100%);
+      color: #fff;
+      font-size: 1.6rem;
+      font-weight: 700;
+      box-shadow: 0 2px 8px #00bcd444;
+      cursor: pointer;
+      outline: none;
+      transition: background 0.2s, color 0.2s, transform 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.95;
+    }
+    .pie-menu-circle button:hover, .pie-menu-circle button:focus, .pie-menu-circle button.active {
+      background: linear-gradient(120deg, #fff 0%, #00bcd4 100%);
+      color: #233447;
+      transform: scale(1.18);
+      box-shadow: 0 4px 16px #00bcd488;
+      z-index: 2;
+    }
+    .pie-menu-circle button:nth-child(1) { left: 50%; top: 0%; transform: translate(-50%, 0); }
+    .pie-menu-circle button:nth-child(2) { left: 90%; top: 25%; transform: translate(-50%, -50%); }
+    .pie-menu-circle button:nth-child(3) { left: 90%; top: 75%; transform: translate(-50%, -50%); }
+    .pie-menu-circle button:nth-child(4) { left: 50%; top: 100%; transform: translate(-50%, -100%); }
+    .pie-menu-circle button:nth-child(5) { left: 10%; top: 75%; transform: translate(-50%, -50%); }
+    .pie-menu-circle button:nth-child(6) { left: 10%; top: 25%; transform: translate(-50%, -50%); }
+    /* Side Nav (Mobile) */
+    .side-nav-mobile {
+      display: none;
+      position: fixed;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      background: rgba(16,25,36,0.98);
+      box-shadow: 2px 0 24px #00bcd422;
+      border-radius: 0 18px 18px 0;
+      z-index: 9999;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      gap: 12px;
+    }
+    .side-nav-mobile a {
+      display: block;
+      width: 48px; height: 48px;
+      margin: 8px 0;
+      font-size: 1.6rem;
+      color: #eaf6fb;
+      background: none;
+      border-radius: 12px;
+      text-align: center;
+      line-height: 48px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
+    }
+    .side-nav-mobile a:active, .side-nav-mobile a:hover {
+      background: linear-gradient(90deg, #00bcd4 0%, #233447 100%);
+      color: #fff;
+      box-shadow: 0 4px 16px #00bcd444;
+      transform: scale(1.08);
+    }
+    @media (max-width: 900px) {
+      .pie-menu-nav { display: none !important; }
+      .side-nav-mobile { display: flex !important; }
+    }
+    @media (min-width: 901px) {
+      .pie-menu-nav { display: block; }
+      .side-nav-mobile { display: none !important; }
+    }
+  </style>
+  <script>
+    // Pie Menu Nav logic (desktop, new style, spawn at mouse)
+    const pieMenu = document.getElementById('pieMenu');
+    const pieCircle = pieMenu.querySelector('.pie-menu-circle');
+    let pieActive = false;
+    function hidePieMenu() {
+      if (!pieMenu.classList.contains('active')) return;
+      pieMenu.classList.add('fading');
+      pieMenu.classList.remove('active');
+      pieActive = false;
+      setTimeout(() => {
+        pieMenu.classList.remove('fading');
+      }, 300);
+    }
+    document.addEventListener('contextmenu', function(e) {
+      if (window.innerWidth > 900) {
+        e.preventDefault();
+        pieMenu.classList.remove('fading');
+        pieMenu.classList.add('active');
+        // Place the pie menu at the mouse position, centered
+        const menuRect = pieCircle.getBoundingClientRect();
+        const menuW = menuRect.width || 240;
+        const menuH = menuRect.height || 240;
+        let left = e.clientX - menuW/2;
+        let top = e.clientY - menuH/2;
+        // Clamp to viewport
+        left = Math.max(8, Math.min(left, window.innerWidth - menuW - 8));
+        top = Math.max(8, Math.min(top, window.innerHeight - menuH - 8));
+        pieMenu.style.left = left + 'px';
+        pieMenu.style.top = top + 'px';
+        pieMenu.style.width = menuW + 'px';
+        pieMenu.style.height = menuH + 'px';
+        pieActive = true;
+      }
+    });
+    // Hide pie menu on click outside or scroll/resize
+    document.addEventListener('mousedown', function(e) {
+      if (pieActive && !pieMenu.contains(e.target)) {
+        hidePieMenu();
+      }
+    });
+    window.addEventListener('scroll', hidePieMenu);
+    window.addEventListener('resize', hidePieMenu);
+    // Hide pie menu on nav click
+    pieCircle.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        hidePieMenu();
+        const target = this.getAttribute('data-target');
+        if (target && target.startsWith('#')) {
+          const section = document.querySelector(target);
+          if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+      btn.addEventListener('mouseenter', function() {
+        pieCircle.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+      btn.addEventListener('mouseleave', function() {
+        this.classList.remove('active');
+      });
+    });
+    // Hide on ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') hidePieMenu();
+    });
+
+    // TikTok iframes: play on hover, pause on mouseleave
+    function setTikTokPlayback(iframe, play) {
+      // TikTok embed supports postMessage API for play/pause
+      // See: https://developers.tiktok.com/doc/embed-videos-websites/
+      if (!iframe || !iframe.contentWindow) return;
+      try {
+        iframe.contentWindow.postMessage({ method: play ? 'play' : 'pause' }, '*');
+      } catch(e) {}
+    }
+    document.querySelectorAll('#gallery iframe').forEach(iframe => {
+      const card = iframe.closest('.card');
+      if (card) {
+        card.addEventListener('mouseenter', () => setTikTokPlayback(iframe, true));
+        card.addEventListener('mouseleave', () => setTikTokPlayback(iframe, false));
+      }
+    });
+
+    // Show notification alert on load (once per session)
+    const notify = document.getElementById('notifyAlert');
+    if (notify && !sessionStorage.getItem('shownNotify')) {
+      notify.style.display = 'flex';
+      setTimeout(() => {
+        notify.style.opacity = '1';
+      }, 100);
+      sessionStorage.setItem('shownNotify', '1');
+    }
+    if (notify) {
+      notify.querySelector('.notify-close').onclick = () => {
+        notify.style.display = 'none';
+      };
+    }
+  </script>
+
   <section id="contact">
     <div class="container">
       <h2 class="text-center mb-4" data-aos="fade-up">Contact Me</h2>
@@ -313,39 +1090,142 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
   <script>
-    AOS.init({
-      duration: 800,
-      once: true,
+    // Custom cursor
+    const cursor = document.createElement('div');
+    cursor.className = 'custom-cursor';
+    document.body.appendChild(cursor);
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
     });
+    document.addEventListener('mousedown', () => cursor.classList.add('active'));
+    document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+    // Hide on mobile
+    if (window.innerWidth < 700) cursor.style.display = 'none';
 
-    // Highlight active nav button on scroll
-    const navLinks = document.querySelectorAll('.side-nav .nav-btn');
-    const sections = ['home','about','skills','works','contact'].map(id => document.getElementById(id));
-    function updateNavHighlight() {
-      let idx = 0;
-      sections.forEach((sec, i) => {
-        if (sec && window.scrollY + 120 >= sec.offsetTop) idx = i;
-      });
-      navLinks.forEach((btn, i) => btn.classList.toggle('active', i === idx));
-    }
-    window.addEventListener('scroll', updateNavHighlight);
-    document.addEventListener('DOMContentLoaded', updateNavHighlight);
+    AOS.init({ duration: 800, once: true });
 
-    // Mobile nav toggle
-    function toggleMobileNav() {
-      const nav = document.querySelector('.side-nav');
-      nav.classList.toggle('show');
+    // Mobile detection
+    function isMobile() {
+      return window.innerWidth <= 600 || /Mobi|Android/i.test(navigator.userAgent);
     }
 
-    // Hide mobile nav on link click
-    document.querySelectorAll('.side-nav .nav-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-          document.querySelector('.side-nav').classList.remove('show');
-        }
-      });
+
+
+    // Floating particles/parallax
+    const canvas = document.getElementById('particlesCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeParticles() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    function createParticles() {
+      particles = [];
+      let count = isMobile() ? 10 : 22;
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          r: isMobile() ? 2.2 + Math.random() * 1.8 : 3.5 + Math.random() * 2.5,
+          dx: (Math.random()-0.5)*(isMobile()?0.08:0.18),
+          dy: (Math.random()-0.5)*(isMobile()?0.08:0.18),
+          color: `rgba(0,188,212,0.22)`
+        });
+      }
+    }
+    function drawParticles() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (let p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 2*Math.PI);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0) p.x = window.innerWidth;
+        if (p.x > window.innerWidth) p.x = 0;
+        if (p.y < 0) p.y = window.innerHeight;
+        if (p.y > window.innerHeight) p.y = 0;
+      }
+      requestAnimationFrame(drawParticles);
+    }
+    resizeParticles();
+    createParticles();
+    drawParticles();
+    window.addEventListener('resize', () => {
+      resizeParticles();
+      createParticles();
     });
+
+    // 3D tilt effect for cards (simplified on mobile, disabled for loaded TikTok)
+    document.querySelectorAll('.card').forEach(card => {
+      let tiltActive = false;
+      card.addEventListener('mousemove', e => {
+        if (isMobile() || card.classList.contains('tiktok-loaded')) return;
+        tiltActive = true;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cx = rect.width/2, cy = rect.height/2;
+        const dx = (x-cx)/cx, dy = (y-cy)/cy;
+        card.style.transform = `rotateY(${dx*8}deg) rotateX(${-dy*8}deg) scale(1.03)`;
+        card.style.boxShadow = `0 16px 48px #00bcd499, 0 4px 24px #23344799`;
+      });
+      card.addEventListener('mouseleave', () => {
+        if (isMobile() || card.classList.contains('tiktok-loaded')) return;
+        tiltActive = false;
+        card.style.transform = '';
+        card.style.boxShadow = '';
+      });
+      // On mobile, tap to pop
+      if (isMobile()) {
+        card.addEventListener('touchstart', () => {
+          card.style.transform = 'scale(1.03)';
+          card.style.boxShadow = '0 16px 48px #00bcd499, 0 4px 24px #23344799';
+        });
+        card.addEventListener('touchend', () => {
+          card.style.transform = '';
+          card.style.boxShadow = '';
+        });
+      }
+    });
+
+    // Three.js 3D background (low-poly mesh)
+    if (window.THREE) {
+      const threeDiv = document.getElementById('three-bg');
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+      camera.position.z = 7;
+      const renderer = new THREE.WebGLRenderer({ alpha: true });
+      renderer.setClearColor(0x000000, 0);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      threeDiv.appendChild(renderer.domElement);
+      // Geometry
+      const geometry = new THREE.IcosahedronGeometry(3, 1);
+      const material = new THREE.MeshStandardMaterial({ color: 0x00bcd4, flatShading: true, metalness: 0.2, roughness: 0.7 });
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+      // Light
+      const light = new THREE.PointLight(0xffffff, 1, 100);
+      light.position.set(10, 10, 10);
+      scene.add(light);
+      // Animate
+      function animate() {
+        mesh.rotation.x += 0.003;
+        mesh.rotation.y += 0.004;
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+      animate();
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth/window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
   </script>
 </body>
 </html>
