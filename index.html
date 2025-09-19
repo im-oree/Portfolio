@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Are you vexing with me?</title>
+  <meta charset="utf-8" />
+  <title>Will you date me?</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Falling hearts */
+    /* falling hearts */
     .heart {
       position: fixed;
       top: -20px;
       font-size: 24px;
       animation: fall 5s linear forwards;
       z-index: 9999;
+      pointer-events: none;
     }
     @keyframes fall {
       to {
@@ -20,143 +21,314 @@
         opacity: 0;
       }
     }
+
+    /* simple loading dots */
+    .dots {
+      display: inline-block;
+      width: 36px;
+      text-align: left;
+    }
+    .dots span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin-right: 4px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.2;
+      animation: dot 1s infinite;
+    }
+    .dots span:nth-child(2) { animation-delay: .15s; }
+    .dots span:nth-child(3) { animation-delay: .3s; }
+    @keyframes dot {
+      0% { opacity: .2; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-6px); }
+      100% { opacity: .2; transform: translateY(0); }
+    }
   </style>
 </head>
-<body class="bg-pink-100 flex items-center justify-center h-screen">
-  <div id="container" class="bg-white p-6 rounded-2xl shadow-lg w-[350px] text-center">
-    
-    <!-- Step 1 -->
-    <div id="step1">
-      <h1 class="text-xl font-bold mb-4">Are you vexing with me? 😢</h1>
-      <button id="noBtn" class="bg-red-400 text-white px-4 py-2 rounded-lg m-2">No</button>
-      <button id="yesBtn" class="bg-green-400 text-white px-4 py-2 rounded-lg m-2">Yes</button>
+<body class="bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center min-h-screen">
+  <div class="bg-white/90 p-6 rounded-2xl shadow-2xl w-[380px] text-center">
+    <!-- Step A: Will you date me -->
+    <div id="stepA">
+      <h1 class="text-2xl font-bold mb-4">Will you date me? 💭</h1>
+      <p class="mb-4 text-sm text-gray-600">Pick honestly... or try to lie 😏</p>
+      <button id="noA" class="bg-red-500 text-white px-4 py-2 rounded-lg m-2">No</button>
+      <button id="yesA" class="bg-green-500 text-white px-4 py-2 rounded-lg m-2">Yes</button>
     </div>
-    
-    <!-- Step 2 (reason input) -->
-    <div id="step2" class="hidden">
-      <h1 class="text-lg font-semibold mb-4">Why are you vexing with me? 😭</h1>
-      <form id="reasonForm" action="https://formspree.io/f/xandrbna" method="POST">
-        <textarea name="reason" class="w-full border rounded-lg p-2 mb-3" placeholder="Type your reason..."></textarea>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Submit</button>
+
+    <!-- Step B: Reason / secret submit -->
+    <div id="stepB" class="hidden">
+      <h2 class="text-lg font-semibold mb-3">Aww — why tho? 💬</h2>
+      <form id="dateForm" class="flex flex-col items-stretch">
+        <textarea name="reason" id="reasonInput" required class="w-full border rounded-lg p-2 mb-3 resize-none" rows="4" placeholder="Tell me why you'd date me... (or what made you say yes)"></textarea>
+        <div class="flex items-center justify-center">
+          <button id="submitReason" type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg mr-3">Submit</button>
+          <div id="loading" class="dots hidden">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
       </form>
     </div>
-    
-    <!-- Step 3 -->
-    <div id="step3" class="hidden">
-      <h1 class="text-xl font-bold mb-4">Are you going to forgive me? 🥺</h1>
-      <button id="forgiveNoBtn" class="bg-red-400 text-white px-4 py-2 rounded-lg m-2">No</button>
-      <button id="forgiveYesBtn" class="bg-green-400 text-white px-4 py-2 rounded-lg m-2">Yes</button>
+
+    <!-- Step C: Are you sure -->
+    <div id="stepC" class="hidden">
+      <h2 class="text-xl font-bold mb-4">Are you sure you wanna date me? 🥺</h2>
+      <button id="noC" class="bg-red-500 text-white px-4 py-2 rounded-lg m-2">No</button>
+      <button id="yesC" class="bg-green-500 text-white px-4 py-2 rounded-lg m-2">Yes</button>
     </div>
-    
-    <!-- Step 4 -->
-    <div id="step4" class="hidden">
-      <h1 class="text-2xl font-bold text-green-600 mb-4">YAY!! 🎉</h1>
-      <p class="text-lg">Thank you for forgiving me 💖</p>
+
+    <!-- Step D: Final yay -->
+    <div id="stepD" class="hidden">
+      <h2 class="text-2xl font-extrabold text-rose-600 mb-3">YAYYYY!! 🥳</h2>
+      <p class="mb-3">We did it. You made my week.</p>
+      <button id="done" class="mt-2 bg-pink-500 text-white px-4 py-2 rounded-lg">Save me this moment</button>
     </div>
-    
+
+    <!-- Step Riddle: Must solve to continue -->
+    <div id="stepRiddle" class="hidden">
+      <h1 class="text-2xl font-bold mb-4">Solve this riddle to continue! 🧠</h1>
+      <p class="mb-4 text-gray-700">I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?</p>
+      <input id="riddleAnswer" type="text" class="border rounded-lg p-3 mb-3 w-full text-lg" placeholder="Your answer...">
+      <button id="submitRiddle" class="bg-indigo-600 text-white px-6 py-3 rounded-lg text-lg w-full">Submit</button>
+      <div id="riddleFeedback" class="mt-2 text-red-500"></div>
+    </div>
+
+    <!-- Step Yes/No Questions -->
+    <div id="stepYN" class="hidden">
+      <h2 class="text-lg font-semibold mb-3" id="ynQuestion"></h2>
+      <div class="flex flex-col gap-4 items-center">
+        <button id="ynYes" class="bg-green-500 text-white px-8 py-3 rounded-lg text-lg w-3/4">Yes</button>
+        <button id="ynNo" class="bg-red-500 text-white px-8 py-3 rounded-lg text-lg w-3/4 relative">No</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    const noBtn = document.getElementById("noBtn");
-    const yesBtn = document.getElementById("yesBtn");
-    const forgiveNoBtn = document.getElementById("forgiveNoBtn");
-    const forgiveYesBtn = document.getElementById("forgiveYesBtn");
+    // buttons
+    const noA = document.getElementById('noA');
+    const yesA = document.getElementById('yesA');
+    const stepA = document.getElementById('stepA');
+    const stepB = document.getElementById('stepB');
+    const stepC = document.getElementById('stepC');
+    const stepD = document.getElementById('stepD');
 
-    // Step 1 logic
-    noBtn.addEventListener("click", () => {
-      alert("You are lying 😤");
-      noBtn.disabled = true;
-      noBtn.classList.add("opacity-50");
+    const dateForm = document.getElementById('dateForm');
+    const loading = document.getElementById('loading');
+    const submitReason = document.getElementById('submitReason');
+    const noC = document.getElementById('noC');
+    const yesC = document.getElementById('yesC');
+
+    // Riddle logic
+    const stepRiddle = document.getElementById('stepRiddle');
+    const submitRiddle = document.getElementById('submitRiddle');
+    const riddleAnswer = document.getElementById('riddleAnswer');
+    const riddleFeedback = document.getElementById('riddleFeedback');
+    const stepYN = document.getElementById('stepYN');
+    const ynQuestion = document.getElementById('ynQuestion');
+    const ynYes = document.getElementById('ynYes');
+    const ynNo = document.getElementById('ynNo');
+
+    // --- Collect answers ---
+    let answers = {
+      riddle: '',
+      yn: [],
+      reason: ''
+    };
+
+    // Hide all except riddle on load
+    stepA.classList.add('hidden');
+    stepB.classList.add('hidden');
+    stepC.classList.add('hidden');
+    stepD.classList.add('hidden');
+    stepYN.classList.add('hidden');
+
+    stepRiddle.classList.remove('hidden');
+
+    submitRiddle.addEventListener('click', () => {
+      const answer = riddleAnswer.value.trim().toLowerCase();
+      if (answer === 'echo') {
+        answers.riddle = answer; // Save the riddle answer
+        stepRiddle.classList.add('hidden');
+        stepYN.classList.remove('hidden');
+        ynIndex = 0;
+        showNextYN();
+      } else {
+        riddleFeedback.textContent = "Nope! Try again.";
+      }
     });
 
-    yesBtn.addEventListener("click", () => {
-      document.getElementById("step1").classList.add("hidden");
-      document.getElementById("step2").classList.remove("hidden");
+    // Yes/No questions logic
+    const ynQuestions = [
+      "Do you like surprises?",
+      "Would you go on a spontaneous adventure?",
+      "Is loyalty important to you?",
+      "Do you enjoy late night talks?",
+      "Would you dance in the rain with me?",
+      "Do you believe in soulmates?",
+      "Would you travel the world with someone you love?",
+      "Is honesty a must in a relationship?",
+      "Do you like cheesy pickup lines?",
+      "Would you watch the stars with me?",
+      "Do you like holding hands in public?",
+      "Would you try new foods with me?",
+      "Do you enjoy silly jokes?",
+      "Would you sing karaoke with me?",
+      "Do you like surprises on your birthday?",
+      "Would you go on a road trip with me?",
+      "Do you like pets?",
+      "Would you bake cookies together?",
+      "Do you enjoy board games?",
+      "Would you write me a love letter?",
+      "Will you date me?" // last question
+    ];
+    let ynIndex = 0;
+    function showNextYN() {
+      ynQuestion.textContent = ynQuestions[ynIndex];
+      ynYes.style.display = 'block';
+      ynNo.style.display = 'block';
+      ynNo.style.position = 'relative';
+      ynNo.style.left = '0px';
+      ynNo.style.top = '0px';
+      if (ynIndex === ynQuestions.length - 1) {
+        // Last question: make No button move
+        ynNo.onmouseenter = ynNo.ontouchstart = function() {
+          // Move to a random position within the parent
+          const parent = ynNo.parentElement;
+          const maxX = parent.offsetWidth - ynNo.offsetWidth;
+          const maxY = parent.offsetHeight - ynNo.offsetHeight;
+          const randX = Math.random() * maxX * 0.8 - maxX * 0.4;
+          const randY = Math.random() * maxY * 0.8 - maxY * 0.4;
+          ynNo.style.position = 'relative';
+          ynNo.style.left = randX + 'px';
+          ynNo.style.top = randY + 'px';
+        };
+      } else {
+        ynNo.onmouseenter = null;
+        ynNo.ontouchstart = null;
+        ynNo.style.left = '0px';
+        ynNo.style.top = '0px';
+      }
+    }
+    ynYes.addEventListener('click', () => {
+      if (ynIndex === ynQuestions.length - 1) {
+        stepYN.classList.add('hidden');
+        stepA.classList.remove('hidden');
+      } else {
+        answers.yn[ynIndex] = true; // Save the answer
+        ynIndex++;
+        showNextYN();
+      }
+    });
+    ynNo.addEventListener('click', () => {
+      if (ynIndex === ynQuestions.length - 1) {
+        // Do nothing, button will move
+      } else {
+        answers.yn[ynIndex] = false; // Save the answer
+        ynIndex++;
+        showNextYN();
+      }
     });
 
-    // Step 2 logic (smooth Formspree submit)
-    document.getElementById("reasonForm").addEventListener("submit", function(e) {
-      e.preventDefault();  // stop reload
+    // Step A behavior
+    noA.addEventListener('click', () => {
+      alert("You lying fam 😤");
+      noA.disabled = true;
+      noA.classList.add('opacity-50');
+    });
 
-      const form = this;
-      const data = new FormData(form);
+    yesA.addEventListener('click', () => {
+      stepA.classList.add('hidden');
+      stepB.classList.remove('hidden');
+      document.getElementById('reasonInput').focus();
+    });
 
-      fetch(form.action, {
+    // Step B: AJAX Formspree submit (send all answers)
+    dateForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      loading.classList.remove('hidden');
+      submitReason.disabled = true;
+      answers.reason = document.getElementById('reasonInput').value;
+      // Build payload
+      const payload = new FormData();
+      payload.append('riddle', answers.riddle);
+      ynQuestions.forEach((q, i) => {
+        payload.append('q' + (i+1), q + ': ' + (answers.yn[i] || ''));
+      });
+      payload.append('reason', answers.reason);
+      fetch('https://formspree.io/f/xandrbna', {
         method: 'POST',
-        body: data,
+        body: payload,
         headers: { 'Accept': 'application/json' }
       })
-      .then(response => {
-        if (response.ok) {
-          document.getElementById("step2").classList.add("hidden");
-          document.getElementById("step3").classList.remove("hidden");
+      .then(async (res) => {
+        loading.classList.add('hidden');
+        submitReason.disabled = false;
+        if (res.ok) {
+          // go to confirmation step
+          stepB.classList.add('hidden');
+          stepC.classList.remove('hidden');
         } else {
-          alert("Oops! Something went wrong.");
+          const txt = await res.text();
+          console.error('Formspree response error:', txt);
+          alert('Oops, couldn\'t send. Try again.');
         }
       })
-      .catch(error => {
-        console.error("Form submission error:", error);
-        alert("Oops! Something went wrong.");
+      .catch((err) => {
+        loading.classList.add('hidden');
+        submitReason.disabled = false;
+        console.error('Fetch error:', err);
+        alert('Network error. Try again later.');
       });
     });
 
-    // Step 3 logic
-    forgiveNoBtn.addEventListener("click", () => {
-      alert("Oga, you don’t have a choice 😏");
-      forgiveNoBtn.disabled = true;
-      forgiveNoBtn.classList.add("opacity-50");
+    // Step C behavior
+    noC.addEventListener('click', () => {
+      alert("Bruh, you don't get to say no 😏");
+      noC.disabled = true;
+      noC.classList.add('opacity-50');
     });
 
-    forgiveYesBtn.addEventListener("click", () => {
-      document.getElementById("step3").classList.add("hidden");
-      document.getElementById("step4").classList.remove("hidden");
+    yesC.addEventListener('click', () => {
+      stepC.classList.add('hidden');
+      stepD.classList.remove('hidden');
+      launchCelebration();
+    });
 
-      // 🎉 Continuous Confetti + Hearts for 5 seconds
-      let duration = 5 * 1000;
-      let end = Date.now() + duration;
+    // Done button just shows some flair (non-essential)
+    document.getElementById('done').addEventListener('click', () => {
+      alert("Moment saved in vibes 💾❤️");
+    });
+
+    // Confetti + falling hearts for 5s
+    function launchCelebration() {
+      const duration = 5 * 1000;
+      const end = Date.now() + duration;
 
       (function frame() {
-        confetti({
-          particleCount: 5,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 }
-        });
-        confetti({
-          particleCount: 5,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 }
-        });
-        confetti({
-          particleCount: 2,
-          spread: 70,
-          shapes: ['circle'],
-          scalar: 2,
-          origin: { y: 0.6 },
-          colors: ['#ff69b4', '#ff1493', '#ff0000']
-        });
+        // side bursts
+        confetti({ particleCount: 6, angle: 60, spread: 50, origin: { x: 0 } });
+        confetti({ particleCount: 6, angle: 120, spread: 50, origin: { x: 1 } });
+        // middle hearts (scaled circles look like hearts in color)
+        confetti({ particleCount: 4, spread: 70, shapes: ['circle'], scalar: 2, origin: { y: 0.6 }, colors: ['#ff7aa2', '#ff4d7e', '#ff8fb2'] });
 
         if (Date.now() < end) {
           requestAnimationFrame(frame);
         }
       }());
 
-      // 💕 Falling heart emojis
-      let heartInterval = setInterval(() => {
-        let heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.innerHTML = "💖";
-        document.body.appendChild(heart);
+      // falling heart emojis
+      const heartInterval = setInterval(() => {
+        const h = document.createElement('div');
+        h.className = 'heart';
+        h.style.left = Math.random() * 100 + 'vw';
+        h.innerText = ['💖','💘','💞'][Math.floor(Math.random()*3)];
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 5200);
+      }, 250);
 
-        setTimeout(() => {
-          heart.remove();
-        }, 5000);
-      }, 300);
-
-      setTimeout(() => clearInterval(heartInterval), duration);
-    });
+      setTimeout(() => clearInterval(heartInterval), duration + 300);
+    }
   </script>
 </body>
 </html>
