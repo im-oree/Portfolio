@@ -48,7 +48,21 @@
   </style>
 </head>
 <body class="bg-gradient-to-br from-pink-50 to-purple-50 flex items-center justify-center min-h-screen">
-  <div class="bg-white/90 p-6 rounded-2xl shadow-2xl w-[380px] text-center">
+  <div id="countdownBar" class="fixed top-0 left-0 w-full bg-indigo-600 text-white text-center py-2 text-lg z-50"></div>
+  <div id="expiredModal" class="fixed inset-0 flex items-center justify-center bg-white z-50 hidden">
+    <div class="text-center p-8 rounded-xl shadow-xl bg-white">
+      <h1 class="text-2xl font-bold mb-4 text-rose-600">Time's up!</h1>
+      <p class="text-lg">Sorry, this form is only available until 11:00PM today.</p>
+    </div>
+  </div>
+  <div id="countdownOverlay" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+    <div class="text-center p-8 rounded-xl shadow-xl bg-white/90">
+      <h1 class="text-2xl font-bold mb-4 text-indigo-600">Please wait...</h1>
+      <p class="text-lg">The form will unlock at 11:00PM today.<br><span id="overlayCountdown"></span></p>
+    </div>
+  </div>
+
+  <div class="bg-white/90 p-6 rounded-2xl shadow-2xl w-[380px] text-center" id="mainApp">
     <!-- Step A: Will you date me -->
     <div id="stepA">
       <h1 class="text-2xl font-bold mb-4">Will you date me? 💭</h1>
@@ -329,6 +343,36 @@
 
       setTimeout(() => clearInterval(heartInterval), duration + 300);
     }
+
+    // Countdown logic
+    function updateCountdown() {
+      const now = new Date();
+      const deadline = new Date();
+      deadline.setHours(23, 0, 0, 0); // 11:00PM today
+      const diff = deadline - now;
+      const bar = document.getElementById('countdownBar');
+      const expired = document.getElementById('expiredModal');
+      const mainApp = document.getElementById('mainApp');
+      const overlay = document.getElementById('countdownOverlay');
+      const overlayCountdown = document.getElementById('overlayCountdown');
+      if (diff <= 0) {
+        bar.textContent = '';
+        mainApp.style.display = '';
+        expired.classList.add('hidden');
+        overlay.classList.add('hidden');
+      } else {
+        const h = Math.floor(diff / 1000 / 60 / 60);
+        const m = Math.floor((diff / 1000 / 60) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        const timeStr = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        bar.textContent = `⏳ Time left: ${timeStr} until 11:00PM`;
+        overlayCountdown.textContent = timeStr;
+        mainApp.style.display = 'none';
+        overlay.classList.remove('hidden');
+        setTimeout(updateCountdown, 1000);
+      }
+    }
+    updateCountdown();
   </script>
 </body>
 </html>
